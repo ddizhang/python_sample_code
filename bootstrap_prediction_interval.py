@@ -1,3 +1,8 @@
+
+# This script is a framework of calculating the prediction interval
+# for any given model, taken in as an object
+
+
 import pandas as pd
 import numpy as np
 import os

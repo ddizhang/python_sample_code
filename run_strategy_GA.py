@@ -6,6 +6,13 @@ Created on Tue May 22 15:27:44 2018
 """
 
 
+# this is one of the script of a project regarding inventory replenishment.
+# The goal is to find the best strategy to buy a bunch of items from a few vendors,
+# in order to minimize item costs and opportunity cost (out of stock loss)
+# with each vendor having their own discount policy (free shipping over $XXX etc).
+# Under certain circumstances, we'll buy few surplus items in order to reach the threshold for free shipping.
+# This script is about how we'll use Generic Algorithm to find the best strategy.
+
 
 
 import numpy as np
