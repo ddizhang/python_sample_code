@@ -533,14 +533,8 @@ def run_strategy_vdperm(strategy, vd_perm, cuc_vendor_avail, cuc_vendor_avail_fr
                         # if able to make freight with chosen surplus parts
                         if perm_vendor_dict[vd_perm[i]].make_freight(items.loc[ind, ['price', 'qty']], include_current_value = True):
                             ### add to bought items:
-                            # update surplus item need 
-                            cp_surplus_avail = update_need(cp_surplus_avail, ind, 'surplus_id')
-                            # surplus result in cp_cuc_avail_w_output format
-                            surplus_result = surplus_result.append(cp_surplus_avail.loc[ind])
-                            # update freight_vendor
-                            freight_vendor_surplus.append(vd_perm[i])    
-                            # update surplus budget
-                            surplus_budget = surplus_budget - sum(items.loc[ind, 'price'])                        
+                            cp_surplus_avail, surplus_result, freight_vendor_surplus, surplus_budget = \
+                                add_surplus_to_brought_items(cp_surplus_avail, ind, surplus_result, freight_vendor_surplus, vd_perm, surplus_budget)
                             
                     # qty freight: choose from cheapest, check budget
                     elif perm_vendor_dict[vd_perm[i]].freight_type == 'qty':
@@ -551,14 +545,9 @@ def run_strategy_vdperm(strategy, vd_perm, cuc_vendor_avail, cuc_vendor_avail_fr
                         # if amount smaller than surplus budget
                         if sum(items.loc[ind, 'price']) <= surplus_budget:
                             #add to bought items
-                            # update surplus item need 
-                            cp_surplus_avail = update_need(cp_surplus_avail, ind, 'surplus_id')
-                            # surplus result in cp_cuc_avail_w_output format
-                            surplus_result = surplus_result.append(cp_surplus_avail.loc[ind])
-                            # update freight_vendor
-                            freight_vendor_surplus.append(vd_perm[i])
-                            # update surplus budget
-                            surplus_budget = surplus_budget - sum(items.loc[ind, 'price'])
+                            cp_surplus_avail, surplus_result, freight_vendor_surplus, surplus_budget = \
+                                add_surplus_to_brought_items(cp_surplus_avail, ind, surplus_result, freight_vendor_surplus, vd_perm, surplus_budget)
+
             
             # get combined freight vendor list
             freight_vendor = freight_vendor_generic + freight_vendor_surplus
@@ -676,7 +665,18 @@ def run_strategy_vdperm(strategy, vd_perm, cuc_vendor_avail, cuc_vendor_avail_fr
 
 
 
+def add_surplus_to_brought_items(cp_surplus_avail, ind, surplus_result, freight_vendor_surplus, vd_perm, surplus_budget):
+    #add to bought items
+    # update surplus item need 
+    cp_surplus_avail = update_need(cp_surplus_avail, ind, 'surplus_id')
+    # surplus result in cp_cuc_avail_w_output format
+    surplus_result = surplus_result.append(cp_surplus_avail.loc[ind])
+    # update freight_vendor
+    freight_vendor_surplus.append(vd_perm[i])
+    # update surplus budget
+    surplus_budget = surplus_budget - sum(items.loc[ind, 'price'])
 
+    return(cp_surplus_avail, surplus_result, freight_vendor_surplus, surplus_budget)
 
 
 
